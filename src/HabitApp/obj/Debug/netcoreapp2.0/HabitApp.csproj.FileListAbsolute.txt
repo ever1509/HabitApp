@@ -14,7 +14,6 @@ C:\Projects\HabitApp\src\HabitApp\bin\Debug\netcoreapp2.0\HabitApp.runtimeconfig
 C:\Projects\HabitApp\src\HabitApp\bin\Debug\netcoreapp2.0\HabitApp.runtimeconfig.dev.json
 C:\Projects\HabitApp\src\HabitApp\bin\Debug\netcoreapp2.0\HabitApp.dll
 C:\Projects\HabitApp\src\HabitApp\bin\Debug\netcoreapp2.0\HabitApp.pdb
-C:\Projects\HabitApp\src\HabitApp\obj\Debug\netcoreapp2.0\HabitApp.csprojResolveAssemblyReference.cache
 C:\Projects\HabitApp\src\HabitApp\obj\Debug\netcoreapp2.0\HabitApp.csproj.CoreCompileInputs.cache
 C:\Projects\HabitApp\src\HabitApp\obj\Debug\netcoreapp2.0\HabitApp.AssemblyInfoInputs.cache
 C:\Projects\HabitApp\src\HabitApp\obj\Debug\netcoreapp2.0\HabitApp.AssemblyInfo.cs
