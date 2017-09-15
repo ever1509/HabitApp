@@ -19,5 +19,9 @@ namespace HabitApp.Models.DataLayer.Repositories
         {
             return DbSet.FirstOrDefault(u => u.UserId == entity.UserId);
         }
+        public User GetSingleByUsername(string username)
+        {
+            return DbSet.FirstOrDefault(u => u.UserName == username);
+        }
     }
 }

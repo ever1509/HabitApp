@@ -14,51 +14,52 @@ using Microsoft.AspNetCore.Mvc;
 namespace HabitApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Question")]
+    [Route("api/Answer")]
     [EnableCors("AllowAnyOrigin")]
-    public class QuestionController : Controller
+    public class AnswerController : Controller
     {
         protected IUnitOfWork UnitOfWork;
-        // GET: api/Question
-        public QuestionController(IUnitOfWork uow)
+        public AnswerController(IUnitOfWork uow)
         {
             UnitOfWork = uow;
         }
+        // GET: api/Answer
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var response = new ListResponse<QuestionViewModel>();
+            var response = new ListResponse<AnswerViewModel>();
             try
             {
                 response.Model = await Task.Run(() =>
                 {
-                    return Mapper.Map<IEnumerable<Question>, IEnumerable<QuestionViewModel>>
-                        (UnitOfWork.QuestionRepository.GetAll().ToList());
+                    return Mapper.Map<IEnumerable<Answer>, IEnumerable<AnswerViewModel>>
+                        (UnitOfWork.AnswerRepository.GetAll().ToList());
                 });
-
             }
             catch (Exception e)
             {
                 response.DidError = true;
                 response.ErrorMessage = e.Message;
                 response.Message = e.StackTrace;
+                UnitOfWork.ErrorRepository.AddErrorLog(e);
+                UnitOfWork.CommitChanges();
             }
             return new OkObjectResult(response);
         }
 
-        // GET: api/Question/5
-        [HttpGet("{id}", Name = "GetQuestion")]
+        // GET: api/Answer/5
+        [HttpGet("{id}", Name = "GetAnswer")]
         public async Task<IActionResult> Get(int id)
         {
-            var response = new SingleResponse<QuestionViewModel>();
+            var response = new SingleResponse<AnswerViewModel>();
             try
             {
-                var result = UnitOfWork.QuestionRepository.Get(new Question(id));
+                var result = UnitOfWork.AnswerRepository.Get(new Answer(id));
                 if (result != null)
                 {
                     response.Model = await Task.Run(() =>
                     {
-                        return Mapper.Map<Question, QuestionViewModel>(result);
+                        return Mapper.Map<Answer, AnswerViewModel>(result);
                     });
                 }
                 else
@@ -77,19 +78,19 @@ namespace HabitApp.Controllers
             return new OkObjectResult(response);
         }
 
-        // POST: api/Question
+        // POST: api/Answer
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]QuestionViewModel value)
+        public async Task<IActionResult> Post([FromBody]AnswerViewModel value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var response = new SingleResponse<QuestionViewModel>();
+            var response = new SingleResponse<AnswerViewModel>();
             try
             {
-                var q = Mapper.Map<QuestionViewModel, Question>(value);
+                var a = Mapper.Map<AnswerViewModel, Answer>(value);
                 response.Model = await Task.Run(() =>
                 {
-                    UnitOfWork.QuestionRepository.Add(q);
+                    UnitOfWork.AnswerRepository.Add(a);
                     UnitOfWork.CommitChanges();
                     return value;
                 });
@@ -105,18 +106,18 @@ namespace HabitApp.Controllers
             return new OkObjectResult(response);
         }
 
-        // PUT: api/Question/5
+        // PUT: api/Answer/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody]QuestionViewModel value)
+        public async Task<IActionResult> Put(int id, [FromBody]AnswerViewModel value)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var response = new SingleResponse<QuestionViewModel>();
+            var response = new SingleResponse<AnswerViewModel>();
             try
             {
-                Question q = Mapper.Map<QuestionViewModel, Question>(value);
-                Question questionDb = UnitOfWork.QuestionRepository.Get(q);
-                if (questionDb == null)
+                Answer a = Mapper.Map<AnswerViewModel, Answer>(value);
+                Answer answerDb = UnitOfWork.AnswerRepository.Get(a);
+                if (answerDb == null)
                 {
                     return NotFound();
                 }
@@ -124,11 +125,10 @@ namespace HabitApp.Controllers
                 {
                     response.Model = await Task.Run(() =>
                     {
-                        questionDb.QuestionDate = value.QuestionDate;
-                        questionDb.QuestionDescription = value.QuestionDescription;
-                        questionDb.HabitId = value.HabitId;
+                        answerDb.AnswerDescription = value.AnswerDescription;
+                        answerDb.QuestionId = value.QuestionId;
                         UnitOfWork.CommitChanges();
-                        return Mapper.Map<Question, QuestionViewModel>(questionDb);
+                        return Mapper.Map<Answer, AnswerViewModel>(answerDb);
                     });
                     response.Message = "Record updated successfully!";
                 }
@@ -145,14 +145,14 @@ namespace HabitApp.Controllers
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}", Name = "RemoveQuestion")]
+        [HttpDelete("{id}", Name = "RemoveAnswer")]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = new SingleResponse<QuestionViewModel>();
+            var response = new SingleResponse<AnswerViewModel>();
             try
             {
-                Question questionDb = UnitOfWork.QuestionRepository.Get(new Question(id));
-                if (questionDb == null)
+                Answer answerDb = UnitOfWork.AnswerRepository.Get(new Answer(id));
+                if (answerDb == null)
                 {
                     return NotFound();
                 }
@@ -160,9 +160,9 @@ namespace HabitApp.Controllers
                 {
                     response.Model = await Task.Run(() =>
                     {
-                        UnitOfWork.QuestionRepository.Remove(questionDb);
+                        UnitOfWork.AnswerRepository.Remove(answerDb);
                         UnitOfWork.CommitChanges();
-                        return Mapper.Map<Question, QuestionViewModel>(questionDb);
+                        return Mapper.Map<Answer, AnswerViewModel>(answerDb);
                     });
                     response.Message = "Record deleted successfully!";
                 }

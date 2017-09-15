@@ -15,4 +15,21 @@ namespace HabitApp.ViewModels.Validations
             RuleFor(u => u.Password).NotEmpty().WithMessage("Password cannot be empty");
         }
     }
+    public class LoginViewModelValidator : AbstractValidator<LoginViewModel>
+    {
+        public LoginViewModelValidator()
+        {
+            RuleFor(l => l.Username).NotEmpty().WithMessage("Invalid username");
+            RuleFor(l => l.Password).NotEmpty().WithMessage("Invalid password");
+        }
+    }
+    public class RegisterViewModelValidator : AbstractValidator<RegisterViewModel>
+    {
+        public RegisterViewModelValidator()
+        {
+            RuleFor(l => l.UserName).NotEmpty().WithMessage("Invalid username");
+            RuleFor(l => l.Email).NotEmpty().WithMessage("Invalid email");
+            RuleFor(l => l.Password).NotEmpty().WithMessage("Invalid password");
+        }
+    }
 }

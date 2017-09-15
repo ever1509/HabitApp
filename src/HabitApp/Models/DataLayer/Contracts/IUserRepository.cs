@@ -8,5 +8,7 @@ namespace HabitApp.Models.DataLayer.Contracts
 {
     public interface IUserRepository : IRepository<User>
     {
+        User GetSingleByUsername(string username);
+
     }
 }
